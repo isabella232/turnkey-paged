@@ -18,6 +18,7 @@ import sys
 import errno
 import subprocess
 import shlex
+import atexit
 
 class _PagedStdout:
     # lazy definition of pager attribute so that we
@@ -34,6 +35,7 @@ class _PagedStdout:
                 pager = subprocess.Popen(pager_env, stdin=subprocess.PIPE)
 
         self._pager = pager
+        atexit.register(self.close)
         return pager
     pager = property(pager)
 
