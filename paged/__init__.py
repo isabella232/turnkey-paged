@@ -54,6 +54,11 @@ class _PagedStdout:
         else:
             sys.stdout.write(text)
 
+    def close(self):
+        if self.pager:
+            self.pager.stdin = sys.stdin
+            self.pager.communicate()
+
 stdout = _PagedStdout()
 
 def test():
