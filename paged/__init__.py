@@ -29,7 +29,7 @@ class _PagedStdout:
         if os.isatty(sys.stdout.fileno()):
             pager_env = os.environ.get('PAGER', subprocess.getoutput('which less'))
             if pager_env:
-                pager = os.popen(pager_env, "w")
+                pager = subprocess.Popen([pager_env], stdin=subprocess.PIPE)
 
         self._pager = pager
         return pager
@@ -37,14 +37,14 @@ class _PagedStdout:
 
     def flush(self):
         if self.pager:
-            self.pager.flush()
+            self.pager.stdin.flush()
         else:
             sys.stdout.flush()
 
     def write(self, text):
         if self.pager:
             try:
-                self.pager.write(text)
+                self.pager.stdin.write(text)
 
             except IOError as e:
                 if e[0] != errno.EPIPE:
