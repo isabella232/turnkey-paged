@@ -17,6 +17,7 @@ import os
 import sys
 import errno
 import subprocess
+import shlex
 
 class _PagedStdout:
     # lazy definition of pager attribute so that we
@@ -29,7 +30,8 @@ class _PagedStdout:
         if os.isatty(sys.stdout.fileno()):
             pager_env = os.environ.get('PAGER', subprocess.getoutput('which less'))
             if pager_env:
-                pager = subprocess.Popen([pager_env], stdin=subprocess.PIPE)
+                pager_env = shlex.split(pager_env)
+                pager = subprocess.Popen(pager_env, stdin=subprocess.PIPE)
 
         self._pager = pager
         return pager
