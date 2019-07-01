@@ -46,7 +46,7 @@ class _PagedStdout:
     def write(self, text):
         if self.pager:
             try:
-                self.pager.stdin.write(text)
+                self.pager.stdin.write(bytes(text, 'utf8'))
 
             except IOError as e:
                 if e[0] != errno.EPIPE:
