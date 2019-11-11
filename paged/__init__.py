@@ -1,8 +1,7 @@
 # Copyright (c) 2008 Liraz Siri <liraz@turnkeylinux.org>
+#               2019 TurnKey GNU/Linux <admin@turnkeylinux.org>
 #
-# This file is part of turnkey-pylib.
-#
-# turnkey-pylib is open source software; you can redistribute it and/or
+# turnkey-paged is open source software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation; either version 3 of the
 # License, or (at your option) any later version.
@@ -20,6 +19,7 @@ import subprocess
 import shlex
 import atexit
 
+
 class _PagedStdout:
     # lazy definition of pager attribute so that we
     # execute pager the first time we need it
@@ -29,7 +29,8 @@ class _PagedStdout:
 
         pager = None
         if os.isatty(sys.stdout.fileno()):
-            pager_env = os.environ.get('PAGER', subprocess.getoutput('which less'))
+            pager_env = os.environ.get('PAGER',
+                                       subprocess.getoutput('which less'))
             if pager_env:
                 pager_env = shlex.split(pager_env)
                 pager = subprocess.Popen(pager_env, stdin=subprocess.PIPE)
@@ -61,7 +62,9 @@ class _PagedStdout:
             self.pager.stdin = sys.stdin
             self.pager.communicate()
 
+
 stdout = _PagedStdout()
+
 
 def test():
     global stdout
@@ -72,6 +75,6 @@ def test():
             break
         print(line, end=' ', file=stdout)
 
-if __name__=="__main__":
-    test()
 
+if __name__ == "__main__":
+    test()
